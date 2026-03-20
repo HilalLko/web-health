@@ -244,7 +244,7 @@
             @foreach($results['brokenLinks'] as $link)
                 <div class="broken-link">
                     <strong>{{ $link['url'] }}</strong><br>
-                    Status: {{ $link['status'] }}{{ isset($link['error']) ? ' - ' . $link['error'] : '' }}
+                    Status: {{ $link['status'] ?? 'Failed' }}{{ isset($link['error']) ? ' - ' . $link['error'] : '' }}
                 </div>
             @endforeach
         </div>

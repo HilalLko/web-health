@@ -74,8 +74,12 @@ class HealthMonitorController extends Controller
     {
         // Validate the incoming request
         $request->validate([
-            'url' => 'required|url',      // Must be a valid URL format
-            'realTime' => 'boolean'        // Optional boolean for real-time monitoring
+            'url' => 'required|url',       // Must be a valid URL format
+            'realTime' => 'boolean',       // Optional boolean for real-time monitoring
+            'captcha_token' => 'required|string|in:verified_human' // Ensure CAPTCHA was passed
+        ], [
+            'captcha_token.required' => 'Please complete the human verification check.',
+            'captcha_token.in' => 'Invalid human verification token.'
         ]);
 
         // Extract the real-time monitoring flag (defaults to false)

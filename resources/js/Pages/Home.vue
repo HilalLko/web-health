@@ -102,7 +102,7 @@
 
             <!-- Form Card -->
             <div class="bg-white/80 dark:bg-slate-800/80 backdrop-blur-xl shadow-2xl rounded-2xl p-8 mb-10 border border-white/20 dark:border-slate-700/50 transform hover:scale-[1.01] transition-all duration-300 animate-slide-up">
-                <form @submit.prevent="submit" class="space-y-6">
+                <form @submit.prevent="handleAnalyzeClick" class="space-y-6">
                     <div>
                         <label for="url" class="block text-sm font-semibold text-gray-700 dark:text-gray-200 mb-2">
                             Website URL
@@ -162,10 +162,20 @@
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path>
                                 </svg>
                                 Analyze Website
+                                <svg class="w-4 h-4 ml-2 opacity-70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+                                </svg>
                             </span>
                         </span>
                     </button>
                 </form>
+
+                <!-- CAPTCHA Modal -->
+                <CaptchaModal
+                    :visible="showCaptcha"
+                    @verified="onCaptchaVerified"
+                    @cancel="onCaptchaCancel"
+                />
             </div>
 
             <!-- Fun Loading Animation -->
@@ -452,6 +462,7 @@
 <script setup>
 import { Head, useForm } from '@inertiajs/vue3';
 import { ref, onMounted, computed, onUnmounted } from 'vue';
+import CaptchaModal from '@/Components/CaptchaModal.vue';
 
 const props = defineProps({
     recent: Array,
@@ -461,6 +472,7 @@ const props = defineProps({
 const form = useForm({
     url: '',
     realTime: false,
+    captcha_token: '',
 });
 
 const results = ref(null);
@@ -483,23 +495,49 @@ const loadingMessages = [
 let messageInterval = null;
 let messageIndex = 0;
 
+// ── CAPTCHA gate ───────────────────────────────────────────
+const showCaptcha = ref(false);
+
+/** Called when the Analyze button is clicked — opens CAPTCHA first */
+const handleAnalyzeClick = () => {
+    if (!form.url) return;
+    showCaptcha.value = true;
+};
+
+/** CAPTCHA passed — now do the real submission */
+const onCaptchaVerified = () => {
+    showCaptcha.value = false;
+    form.captcha_token = 'verified_human';
+    submit();
+};
+
+/** User closed/cancelled the CAPTCHA */
+const onCaptchaCancel = () => {
+    showCaptcha.value = false;
+};
+
+/** Internal: actually post the form (only reachable after CAPTCHA) */
 const submit = () => {
     analyzing.value = true;
     results.value = null;
     messageIndex = 0;
     loadingMessage.value = loadingMessages[0];
-    
+
     // Cycle through loading messages
     messageInterval = setInterval(() => {
         messageIndex = (messageIndex + 1) % loadingMessages.length;
         loadingMessage.value = loadingMessages[messageIndex];
     }, 3000);
-    
+
     form.post('/check', {
         preserveState: true,
         preserveScroll: true,
+        onSuccess: () => {
+            // Reset token so they have to solve CAPTCHA again next time
+            form.captcha_token = '';
+        },
         onFinish: () => {
-            // Analyzing stays true until event is received
+            // Analyzing stays true until WebSocket event is received
         }
     });
 };

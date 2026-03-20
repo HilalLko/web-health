@@ -229,6 +229,11 @@ class HealthCheckService
         // Resolve hostname to IP
         $ip = gethostbyname($host);
 
+        // If resolution fails, it returns the host string
+        if ($ip === $host && filter_var($host, FILTER_VALIDATE_IP) === false) {
+            return false;
+        }
+
         // Block localhost
         if ($ip === '127.0.0.1' || $ip === '::1' || $host === 'localhost') {
             return true;
