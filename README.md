@@ -1,11 +1,12 @@
 # Website Health Monitor
 
-A comprehensive, real-time website health monitoring tool built with Laravel 12, Inertia.js, Vue 3, and Tailwind CSS. Monitor HTTP status, SSL certificates, DNS resolution, security headers, performance metrics, and more—all without requiring user registration.
+A comprehensive, real-time website health monitoring tool built with Laravel 13, Inertia.js v3, Vue 3, and Tailwind CSS. Monitor HTTP status, SSL certificates, DNS resolution, security headers, performance metrics, and more—all without requiring user registration.
 
-![Laravel](https://img.shields.io/badge/Laravel-12.x-FF2D20?style=flat-square&logo=laravel)
+![Laravel](https://img.shields.io/badge/Laravel-13.x-FF2D20?style=flat-square&logo=laravel)
+![Inertia](https://img.shields.io/badge/Inertia-3.x-9555E9?style=flat-square)
 ![Vue.js](https://img.shields.io/badge/Vue.js-3.x-4FC08D?style=flat-square&logo=vue.js)
 ![Tailwind CSS](https://img.shields.io/badge/Tailwind-4.x-38B2AC?style=flat-square&logo=tailwind-css)
-![Pest](https://img.shields.io/badge/Pest-3.x-00C58E?style=flat-square)
+![Pest](https://img.shields.io/badge/Pest-4.x-00C58E?style=flat-square)
 
 ## ✨ Features
 
@@ -42,7 +43,7 @@ A comprehensive, real-time website health monitoring tool built with Laravel 12,
 
 - PHP 8.2 or higher
 - Composer 2.x
-- Node.js 18.x or higher
+- Node.js 20.x or higher
 - npm 9.x or higher
 - Redis (for queues, cache, and sessions)
 - Google PageSpeed Insights API key (free tier available)
@@ -222,7 +223,7 @@ php artisan test --coverage
 
 ### Frontend
 
-- **Inertia.js**: SPA-like experience without API complexity
+- **Inertia.js v3**: SPA-like experience without API complexity
 - **Vue 3**: Reactive components with Composition API
 - **Tailwind CSS**: Utility-first styling with custom design system
 - **Laravel Echo**: Real-time WebSocket communication
