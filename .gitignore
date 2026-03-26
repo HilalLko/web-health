@@ -22,3 +22,13 @@
 Homestead.json
 Homestead.yaml
 Thumbs.db
+/.fleet
+/.idea
+/.vscode
+# Ignore agents directory
+.agents/
+
+# Ignore specific files
+AGENTS.md
+boost.json
+opencode.json

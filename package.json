@@ -20,7 +20,7 @@
         "vite": "^7.0.7"
     },
     "dependencies": {
-        "@inertiajs/vue3": "^2.3.13",
+        "@inertiajs/vue3": "^3.0.0",
         "@vitejs/plugin-vue": "^6.0.4",
         "vue": "^3.5.27"
     }
